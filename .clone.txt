@@ -1,0 +1,10 @@
+  119  git clone -b 18.0 https://github.com/CybroOdoo/CybroAddons.git
+  121  git clone -b 18.0 https://github.com/muk-it/odoo-modules.git
+  127  git clone -b 18.0 https://github.com/OCA/account-financial-tools.git ocafinancialtools
+  128  git clone -b 18.0 https://github.com/OCA/account-reconcile.git ocareconcile
+  129  git clone -b 18.0 https://github.com/OCA/web.git
+  133  git clone -b 18.0 https://github.com/OCA/server-tools.git ocaservertools
+  134  git clone -b 18.0 https://github.com/OCA/project.git ocaproject
+  135  git clone -b 18.0 https://github.com/OCA/helpdesk.git ocahelpdesk
+  284  history | grep clone
+  285  history | grep clone > .clone.txt

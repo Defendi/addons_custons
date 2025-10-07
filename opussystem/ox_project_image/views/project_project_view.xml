@@ -1,0 +1,29 @@
+<odoo>
+
+    <record id="view_edit_project_form_inherit" model="ir.ui.view">
+        <field name="name">Edit Project Form Inherit</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="priority">5</field>
+        <field name="arch" type="xml">
+            <xpath expr="///group[@name='extra_settings']" position="inside">
+				<field name="displayed_image_id" options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_project_image_kanban_inherited">
+        <field name="name">project.project.kanban.image.inherited</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_kanban"/>
+        <field name="arch" type="xml">
+            <field name="sequence" position="after">
+            	<field name="displayed_image_id"/>
+            </field>
+            <xpath expr="//t[@t-name='card']/div/div" position="inside">
+            	<field name="displayed_image_id" widget="attachment_image"/>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>

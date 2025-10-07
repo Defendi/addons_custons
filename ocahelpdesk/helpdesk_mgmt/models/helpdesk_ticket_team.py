@@ -7,6 +7,10 @@ class HelpdeskTeam(models.Model):
     _description = "Helpdesk Ticket Team"
     _inherit = ["mail.thread", "mail.alias.mixin"]
     _order = "sequence, id"
+    _parent_name = "parent_id"
+    _parent_store = True
+    _parent_order = "name"
+    _rec_name = "complete_name"
 
     sequence = fields.Integer(default=10)
     name = fields.Char(required=True)
@@ -64,6 +68,23 @@ class HelpdeskTeam(models.Model):
         default=True,
         help="Allow to select this team when creating a new ticket in the portal.",
     )
+    parent_id = fields.Many2one(
+        "helpdesk.ticket.team", string="Parent Team", index=True
+    )
+    complete_name = fields.Char(
+        compute="_compute_complete_name", store=True, recursive=True
+    )
+    parent_path = fields.Char(index=True)
+
+    @api.depends("name", "parent_id.complete_name")
+    def _compute_complete_name(self):
+        for record in self:
+            if record.parent_id:
+                record.complete_name = (
+                    f"{record.parent_id.complete_name} / {record.name}"
+                )
+            else:
+                record.complete_name = record.name
 
     def _get_applicable_stages(self):
         if self:
@@ -119,3 +140,32 @@ class HelpdeskTeam(models.Model):
         values["alias_defaults"] = defaults = safe_eval(self.alias_defaults or "{}")
         defaults["team_id"] = self.id
         return values
+
+    @api.model
+    def retrieve_dashboard(self):
+        return sorted(self._retrieve_dashboard(), key=lambda d: d.get("sequence", 99))
+
+    def _retrieve_dashboard(self):
+        no_team_tickets = self.env["helpdesk.ticket"].search_count(
+            [("team_id", "=", False), ("stage_id.closed", "=", False)]
+        )
+        return [
+            {
+                "name": self.env._("Open Tickets without team"),
+                "value": no_team_tickets,
+                "sequence": 1,
+                "icon": "fa-exclamation-circle",
+                "show": no_team_tickets > 0,
+                "action": "helpdesk_mgmt.helpdesk_ticket_action_unassigned",
+            },
+            {
+                "name": self.env._("Open Tickets"),
+                "value": self.env["helpdesk.ticket"].search_count(
+                    [("stage_id.closed", "=", False)]
+                ),
+                "sequence": 2,
+                "icon": "fa-life-ring",
+                "show": True,
+                "action": "helpdesk_mgmt.helpdesk_ticket_action_opened",
+            },
+        ]

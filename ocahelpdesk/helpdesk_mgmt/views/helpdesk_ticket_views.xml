@@ -12,6 +12,20 @@
         </field>
         <field name="domain">[('team_id', '=', active_id)]</field>
     </record>
+    <record id="helpdesk_ticket_action_unassigned" model="ir.actions.act_window">
+        <field name="name">Helpdesk Ticket</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field
+            name="domain"
+        >[('team_id', '=', False), ("stage_id.closed", "=", False)]</field>
+    </record>
+    <record id="helpdesk_ticket_action_opened" model="ir.actions.act_window">
+        <field name="name">Helpdesk Ticket</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[("stage_id.closed", "=", False)]</field>
+    </record>
     <record id="helpdesk_ticket_view_search" model="ir.ui.view">
         <field name="name">helpdesk.ticket.view.search</field>
         <field name="model">helpdesk.ticket</field>
@@ -26,6 +40,7 @@
                 <field name="commercial_partner_id" />
                 <field name="user_id" />
                 <field name="name" />
+                <field name="category_id" />
                 <field name="tag_ids" />
                 <field name="stage_id" />
                 <filter
@@ -122,6 +137,12 @@
                         context="{'group_by':'stage_id'}"
                     />
                     <filter
+                        string="Category"
+                        name="group_category"
+                        domain="[]"
+                        context="{'group_by':'category_id'}"
+                    />
+                    <filter
                         string="Tag"
                         name="group_tag"
                         domain="[]"
@@ -170,7 +191,11 @@
                             <field name="active" invisible="1" />
                             <field name="team_id" options='{"always_reload": True}' />
                             <field name="user_ids" invisible="1" readonly="1" />
-                            <field name="user_id" options='{"always_reload": True}' />
+                            <field
+                                name="user_id"
+                                options='{"always_reload": True}'
+                                widget="many2one_avatar_user"
+                            />
                             <field name="priority" widget="priority" />
                             <field
                                 name="company_id"
@@ -222,6 +247,7 @@
                 <field name="partner_id" optional="hide" widget="many2one_avatar" />
                 <field name="partner_name" optional="show" />
                 <field name="user_id" optional="show" widget="many2one_avatar_user" />
+                <field name="category_id" optional="hide" />
                 <field name="unattended" column_invisible="1" />
                 <field name="closed" column_invisible="1" />
                 <field
@@ -263,6 +289,8 @@
                 <field name="name" />
                 <field name="partner_name" />
                 <field name="user_id" />
+                <field name="user_ids" />
+                <field name="team_id" />
                 <field name="sequence" />
                 <field name="color" />
                 <field name="stage_id" />
@@ -292,6 +320,7 @@
                     </t>
                     <t t-name="card">
                         <field class="fw-bold fs-5" name="name" />
+                        <field name="category_id" class="text-muted" />
                         <field name="number" class="text-truncate" />
                         <small class="o_kanban_record_subtitle text-muted">
                             <field name="partner_id" />
@@ -316,7 +345,6 @@
                             <field
                                 name="user_id"
                                 widget="many2one_avatar_user"
-                                domain="[('share', '=', False)]"
                                 class="ms-auto"
                             />
                         </footer>

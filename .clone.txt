@@ -6,5 +6,7 @@
   133  git clone -b 18.0 https://github.com/OCA/server-tools.git ocaservertools
   134  git clone -b 18.0 https://github.com/OCA/project.git ocaproject
   135  git clone -b 18.0 https://github.com/OCA/helpdesk.git ocahelpdesk
+       git clone -b 18.0 https://github.com/OCA/knowledge.git ocaknowledge
+       git clone -b 18.0 https://github.com/OCA/management-system.git
   284  history | grep clone
   285  history | grep clone > .clone.txt

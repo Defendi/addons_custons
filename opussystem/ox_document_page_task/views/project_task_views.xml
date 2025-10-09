@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_ox_task_document_kanban" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban" />
+        <field name="arch" type="xml">
+        	<xpath expr="//kanban/templates/t/main/footer/div[1]" position="inside">
+                <a class="o_project_kanban_box" name="action_document_page_tasks" type="object">
+                    <div>
+                        <b>
+                            <field name="document_page_count" nolabel="1" class="o_value"/>
+                        </b>
+                        <span class="o_label"> Wiki Pages</span>
+                    </div>
+                </a>
+            </xpath>
+        </field>
+    </record>
+    
+    <record id="view_ox_task_document_form" model="ir.ui.view">
+        <field name="name">ox.task.document.form</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2" />
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" type="object" name="action_document_page_tasks" icon="fa-book">
+                    <field string="Wiki Pages" name="document_page_count" widget="statinfo"/>
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>

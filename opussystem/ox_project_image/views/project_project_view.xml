@@ -21,7 +21,7 @@
             	<field name="displayed_image_id"/>
             </field>
             <xpath expr="//t[@t-name='card']/div/div" position="inside">
-            	<field name="displayed_image_id" widget="attachment_image"/>
+            	<field t-if="record.displayed_image_id.value" name="displayed_image_id" widget="attachment_image"/>
             </xpath>
         </field>
     </record>
